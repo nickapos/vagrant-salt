@@ -1,4 +1,5 @@
 base:
   '*':
-    - apache
+    - httpd.apache
+    - db.mysql
     - common-tools

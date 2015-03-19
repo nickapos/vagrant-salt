@@ -63,3 +63,9 @@ common-pkgs:            # State ID
       - emacs
       - openssh-server
       - nginx
+
+
+according to the docs, using salt in master/minion mode, works out of the box, the only thing needed with keys, is for master to accept the keys of the minions
+
+
+nice article: http://dev.mlsdigital.net/posts/IntroToSaltStack/
