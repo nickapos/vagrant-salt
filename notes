@@ -53,3 +53,13 @@ Salt has support for a multienvironment setup that allows for a minion to use a 
 
 ---------
 if there is any error with an sls file, then it fails silently without any errors. If there is one failure in the sls files then none is executed
+
+
+this syntax did not work in my tests
+### common.sls ###
+common-pkgs:            # State ID
+  pkg.installed:        # Make sure all of these are installed
+    - names:
+      - emacs
+      - openssh-server
+      - nginx
