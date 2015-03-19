@@ -1,3 +1,4 @@
 base:
   '*':
     - apache
+    - common-tools

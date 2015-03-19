@@ -1,4 +1,4 @@
-vim-common:
+httpd:
   pkg:
     - installed
 

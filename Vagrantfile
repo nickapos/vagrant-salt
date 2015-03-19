@@ -6,6 +6,10 @@ box_type  = "chef/centos-6.6"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "#{box_type}"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 1
+  end
   
   # For masterless, mount your salt file root
   config.vm.synced_folder "salt/roots/", "/srv/salt/"

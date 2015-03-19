@@ -16,11 +16,9 @@ of bootstrap script. only centos 6.6 works somewhat up to a point. it does not f
 
 reverting to manual test & install with centos 6.6 as reference box
 
-i am getting the same error for minion daemon
-Starting salt-minion daemon: [ERROR   ] Error parsing configuration file: /etc/salt/minion - conf should be a document, not <type 'str'>.
-[  OK  ]
+in the configuration file of the minion we must not use a master line. If we do that the minion will try to connect to the master and eventually timeout. we only need to define file_client: local
+mind the spaces after the colon
+the first run does a yum update so takes some time.
 
-it may be something that has to do with the configuration
-
-in an sls direcroty can 
+in an sls directory can 
 one sls file can include others creatign that way a tree structure of state files
