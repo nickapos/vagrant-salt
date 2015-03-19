@@ -5,9 +5,11 @@ box_type  = "chef/centos-6.6"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "#{box_type}"
-  config.berkshelf.enabled = true
-
- ## Use all the defaults:
+  
+  # For masterless, mount your salt file root
+  config.vm.synced_folder "salt/roots/", "/srv/salt/"
+  
+  ## Use all the defaults:
   config.vm.provision :salt do |salt|
 
     salt.minion_config = "salt/minion"

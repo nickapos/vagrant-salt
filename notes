@@ -1,0 +1,7 @@
+Initial vagrant-salt setup
+http://cnygaard.quora.com/Using-Vagrant-and-Salt-stack-together
+
+
+Repo with examples: 
+https://github.com/saltstack/salty-vagrant
+it is deprecated. for use only as examples
