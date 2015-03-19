@@ -14,11 +14,42 @@ grains is that system used to derive informations about the undelying system (li
 had issues with vagrant salt and ubuntu 14.04 and centos 7.0, precise64. there seem to be some bugs in the dependency management
 of bootstrap script. only centos 6.6 works somewhat up to a point. it does not fail but the provisioning does not happen either
 
-reverting to manual test & install with centos 6.6 as reference box
+centos 6.6 works ubuntu 14.04 64bit does not generate an error but does not install the packages, centos 7 fails with error
 
 in the configuration file of the minion we must not use a master line. If we do that the minion will try to connect to the master and eventually timeout. we only need to define file_client: local
 mind the spaces after the colon
 the first run does a yum update so takes some time.
 
-in an sls directory can 
+in an sls directory  
 one sls file can include others creatign that way a tree structure of state files
+
+there is a templating engine that can be used for sls files, called jinja
+
+saltstack best practices here:
+http://docs.saltstack.com/en/latest/topics/best_practices.html
+
+salt formulas here:
+http://docs.saltstack.com/en/latest/topics/development/conventions/formulas.html
+
+According to the documentation it is enough to include the official formulas in the top sls and they will be retrieved from the default formula repo
+in order to do that we need to set up gitfs. this can be used with any git repo. it seems that this is not supported in the masterless mode: https://groups.google.com/forum/#!topic/salt-users/FL0rTKouA9I
+
+example formula with kitchen-salt support is postgres formula: https://github.com/saltstack-formulas/postgres-formula
+
+update seems to be a standard operation no matter which platform is used. same thing happens with ubuntu too
+
+
+salt file layout:
+
+Directory structure
+
+Before diving onto how exactly we target minions, we must learn how Salt normally stores its states and Pillar information on the master.
+
+The configuration files for the master are in /etc/salt/, the main one being /etc/salt/master. However the state files (sls files) are usually stored in /srv/salt. Pillar files are usually stored in /srv/pillar. Each of these directories has a file called top.sls that indicates which minions are subject to which states/Pillar files. The configuration files for the minion are in /etc/salt also, the main one being /etc/salt/minion.
+
+Salt has support for a multienvironment setup that allows for a minion to use a different set of aggregated directories from which to pull states/Pillar based on this grains and Pillar data, but for the purposes of this tutorial and the sake of simplicity, we'll assume that there are no shenanigans, so all sls files are stored directly under /srv/salt and all Pillar files are stored under /srv/pillar, following a plain directory structure.
+
+
+
+---------
+if there is any error with an sls file, then it fails silently without any errors. If there is one failure in the sls files then none is executed
