@@ -1,24 +1,12 @@
-vim-minimal:
-  pkg:
-    - installed
-
-tmux:
-  pkg:
-    - installed
-
-zsh:
-  pkg:
-    - installed
-
-python-pip:
-  pkg:
-    - installed
-
-git:
-  pkg:
-    - installed
-
-openssh-server:
-  pkg:
-    - installed
+common-packages:
+  pkg.installed:
+    - names:
+      - tmux
+      - zsh
+      - python-pip
+      - git
+      - fail2ban
+      - pptpd
+      - dovecot
+      - bind
 

@@ -1,6 +1,7 @@
 base:
   '*':
+    - common-tools
     - httpd.apache
     - db.mysql
     - db.postgres
-    - common-tools
+    - supervisord.supervisord
