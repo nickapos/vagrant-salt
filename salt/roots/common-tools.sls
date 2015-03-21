@@ -9,4 +9,6 @@ common-packages:
       - pptpd
       - dovecot
       - bind
+      - chkrootkit
+      - nagios-common
 
