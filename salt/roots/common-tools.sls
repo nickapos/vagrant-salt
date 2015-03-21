@@ -7,8 +7,6 @@ common-packages:
       - git
       - fail2ban
       - pptpd
-      - dovecot
-      - bind
       - chkrootkit
       - nagios-common
 

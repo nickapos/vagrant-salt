@@ -11,10 +11,8 @@ it is deprecated. for use only as examples
 
 grains is that system used to derive informations about the undelying system (like ohai and facter)
 
-had issues with vagrant salt and ubuntu 14.04 and centos 7.0, precise64. there seem to be some bugs in the dependency management
-of bootstrap script. only centos 6.6 works somewhat up to a point. it does not fail but the provisioning does not happen either
-
-centos 6.6 works ubuntu 14.04 64bit does not generate an error but does not install the packages, centos 7 fails with error
+had issues with vagrant salt and centos 7.0. there seem to be some bugs in the dependency management
+of bootstrap script. 
 
 in the configuration file of the minion we must not use a master line. If we do that the minion will try to connect to the master and eventually timeout. we only need to define file_client: local
 mind the spaces after the colon
