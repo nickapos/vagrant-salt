@@ -1,6 +1,6 @@
 httpd:
-  pkg.installed:
-    - name: httpd
+  pkg:
+    - installed
   service: 
     - running
 
