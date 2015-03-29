@@ -161,5 +161,15 @@ is defined by a:
         'wheezy' : { 'id': '9.1' },
     }, grain='lsb_distrib_codename', merge=salt['pillar.get']('postgres:lookup')))) %}
 
+# Execution and pitfalls
+
+> - The usual command: _vagrant up_ will start the vm build
+> - The vagrant-salt plugin provides the necessary vagrant/salt integration
+> - Salt always does a full upgrade of the vm before the provisioning
+> - After salt has been installed, the logs can be found in /var/log/salt
+> - a yaml parser and verifier can save you hours of debugging
+> - sometimes salt fails silently, the verifier may help with that
+> - there seems to be a bug in the auto bootstrap script that affects centos 7 provisioning
+
 
 #Questions?

@@ -206,6 +206,18 @@ supervisor-init-file:
     &#39;wheezy&#39; : { &#39;id&#39;: &#39;9.1&#39; },
 }, grain=&#39;lsb_distrib_codename&#39;, merge=salt[&#39;pillar.get&#39;](&#39;postgres:lookup&#39;)))) %}</code></pre>
 </div>
+<div id="execution-and-pitfalls" class="slide section level1">
+<h1>Execution and pitfalls</h1>
+<ul class="incremental">
+<li>The usual command: <em>vagrant up</em> will start the vm build</li>
+<li>The vagrant-salt plugin provides the necessary vagrant/salt integration</li>
+<li>Salt always does a full upgrade of the vm before the provisioning</li>
+<li>After salt has been installed, the logs can be found in /var/log/salt</li>
+<li>a yaml parser and verifier can save you hours of debugging</li>
+<li>sometimes salt fails silently, the verifier may help with that</li>
+<li>there seems to be a bug in the auto bootstrap script that affects centos 7 provisioning</li>
+</ul>
+</div>
 <div id="questions" class="slide section level1">
 <h1>Questions?</h1>
 </div>
