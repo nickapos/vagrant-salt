@@ -22,8 +22,9 @@ Nick Apostolakis
   </p>
   <p class="date">03 of April 2015</p>
 </div>
-<div id="technology-recap" class="titleslide slide section level1"><h1>Technology recap</h1></div><div id="vagrant" class="slide section level2">
-<h1><em><a href="https://www.vagrantup.com/">Vagrant</a></em></h1>
+<div id="technology-recap" class="slide section level1">
+<h1>Technology recap</h1>
+<h2 id="vagrant"><em><a href="https://www.vagrantup.com/">Vagrant</a></em></h2>
 <ul class="incremental">
 <li>a tool for building complete virtualized environments.</li>
 <li>supports lots of different virtualization backends
@@ -45,8 +46,7 @@ Nick Apostolakis
 <li>linux</li>
 </ul></li>
 </ul>
-</div><div id="saltstack" class="slide section level2">
-<h1><em><a href="http://saltstack.com/">Saltstack</a></em></h1>
+<h2 id="saltstack"><em><a href="http://saltstack.com/">Saltstack</a></em></h2>
 <ul class="incremental">
 <li>systems management tool. can be usef for:
 <ul class="incremental">
@@ -54,9 +54,55 @@ Nick Apostolakis
 <li>systems orchestration</li>
 </ul></li>
 <li>written in python</li>
-<li>supports all three operation modes and more:</li>
+<li>supports all operation modes and more:
+<ul class="incremental">
+<li>masterless mode</li>
+<li>master/minions mode</li>
+<li>one off custom command execution either to whole minions environment, or to isolated minions (ansible, capistrano)</li>
+</ul></li>
+<li>uses extensively YAML</li>
+<li>supports templating</li>
 </ul>
 </div>
-<div id="questions" class="titleslide slide section level1"><h1>Questions?</h1></div>
+<div id="chef-salt-1-1-comparison" class="slide section level1">
+<h1>Chef salt 1-1 comparison</h1>
+<ul class="incremental">
+<li>chef recipe -&gt; salt state</li>
+<li>chef resource -&gt; salt state module</li>
+<li>chef attributes/databags -&gt; salt pillars</li>
+<li>chef cookbook -&gt; salt formula</li>
+<li>chef uses ruby DSL -&gt; salt uses YAML and Jinja</li>
+<li>chef can be extended with ruby -&gt; salt can be extended with python</li>
+</ul>
+</div>
+<div id="chef-salt-architectural-differences" class="slide section level1">
+<h1>Chef salt architectural differences</h1>
+<ul class="incremental">
+<li>Chef enforces a specific workflow. The cookbooks have a strictly defined structure, and the relationship of cookbooks is also strictly defined</li>
+<li>Salt does not enforce a specific workflow. Its formulas structure does not follow a specific pattern, but they can be structured in a loosely defined tree.</li>
+</ul>
+</div>
+<div id="vagrant---salt-integration" class="slide section level1">
+<h1><em><a href="https://github.com/nickapos/vagrant-salt">Vagrant - salt integration</a></em></h1>
+<pre><code>box_type  = &quot;chef/centos-6.6&quot;
+Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.box = &quot;#{box_type}&quot;
+  config.vm.provider &quot;virtualbox&quot; do |v|
+    v.memory = 2048
+    v.cpus = 1
+  end
+  # For masterless, mount your salt file root
+  config.vm.synced_folder &quot;salt/roots/&quot;, &quot;/srv/salt/&quot;
+  ## Use all the defaults:
+  config.vm.provision :salt do |salt|
+    salt.minion_config = &quot;salt/minion&quot;
+    salt.run_highstate = true
+
+  end
+end</code></pre>
+</div>
+<div id="questions" class="slide section level1">
+<h1>Questions?</h1>
+</div>
 </body>
 </html>
