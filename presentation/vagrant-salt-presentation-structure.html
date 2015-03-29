@@ -101,6 +101,25 @@ Vagrant.configure(&quot;2&quot;) do |config|
   end
 end</code></pre>
 </div>
+<div id="masterless-mode" class="slide section level1">
+<h1>Masterless mode</h1>
+<p>is defined by a:</p>
+<ul class="incremental">
+<li>&quot;salt/minion&quot; file with contents
+<ul class="incremental">
+<li>file_client: local</li>
+</ul></li>
+<li>it defines the filesystem backend used by salt.</li>
+<li>other backends are:
+<ul class="incremental">
+<li>salt server backend</li>
+<li>gitfs backend</li>
+</ul></li>
+<li>gitfs backend is the chosen method for community formula distribution</li>
+<li>is unsupported by masterless mode</li>
+<li>setting highstate to true, is the salt way to start converging the minion</li>
+</ul>
+</div>
 <div id="questions" class="slide section level1">
 <h1>Questions?</h1>
 </div>

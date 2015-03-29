@@ -69,4 +69,19 @@ output:
       end
     end
 
+# Masterless mode
+
+is defined by a:
+
+> - "salt/minion" file with contents
+    * file_client: local
+> - it defines the filesystem backend used by salt.
+> - other backends are:
+    * salt server backend
+    * gitfs backend
+> - gitfs backend is the chosen method for community formula distribution
+> - is unsupported by masterless mode
+> - setting highstate to true, is the salt way to start converging the minion
+
+
 #Questions?
