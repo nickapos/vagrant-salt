@@ -41,6 +41,7 @@ output:
 > - chef recipe -> salt state
 > - chef resource -> salt state module
 > - chef attributes/databags -> salt pillars
+> - chef ohai -> salt grains
 > - chef cookbook -> salt formula
 > - chef uses ruby DSL -> salt uses YAML and Jinja
 > - chef can be extended with ruby -> salt can be extended with python
@@ -82,6 +83,83 @@ is defined by a:
 > - gitfs backend is the chosen method for community formula distribution
 > - is unsupported by masterless mode
 > - setting highstate to true, is the salt way to start converging the minion
+
+# Salt state files layout
+
+> - Salt excepts a salt directory and a minion file in that
+> - It also expects a directory named roots and a file named top.sls in it
+> - top.sls is the root of all the state files
+    * it defines what kind of environment exists
+    * which sls files are included in which environment
+    * the order by which these sls files are goind to be included
+> - in roots directory we can find any number of sls files, or directories of sls files, the usage of which are defined in top.sls
+
+# top.sls content
+
+    base:
+      '*':
+        - common-tools
+        - httpd.apache
+        - dovecot.dovecot
+        - bind.bind
+        - db.mysql
+        - db.postgres
+        - supervisord.supervisord
+
+
+# Sls file format
+> - Sls files, can include other sls files forming thus a tree. The shape of the tree is fully defined by the developer
+> - Sls files contain mostly YAML, but can also contain Jinla expressions
+> - Sls file entries are separated in execution blocks that are consisted of
+    * a unique block id
+    * a number of salt modules statements
+> - The different execution blocks in an sls file are executed sequentially
+
+# typical sls file
+
+    mysql:
+      pkg:
+        - installed
+
+    mysql-server:
+      pkg:
+        - installed
+      service:
+        - name: mysqld
+        - running
+
+# sls example with custom commands and file transfer
+
+    supervisor:
+      cmd.run:
+        - cwd: /
+        - user: root
+        - name: pip install supervisor
+        - env:
+          LC_ALL: C.UTF-8
+
+    supervisor-init-file:
+      file.managed:
+        - name: /etc/init.d/supervisor
+        - source: salt://supervisord/supervisor
+        - user: root
+        - group: root
+        - mode: 755
+
+# jinja attribute file example
+
+    {% set pg_version = salt['grains.filter_by']({
+        'CentOs' : { 'id': '8.4' },
+        'RedHat' : { 'id': '9.1' },
+        'Arch'   : { 'id': '9.1' },
+        'Debian' : { 'id': '9.3' },
+    }, merge=salt['grains.filter_by']({
+        '14.04'  : { 'id': '9.3' },
+        '14.10'  : { 'id': '9.4' },
+    }, grain='lsb_distrib_release', merge=salt['grains.filter_by']({
+        'jessie' : { 'id': '9.4' },
+        'wheezy' : { 'id': '9.1' },
+    }, grain='lsb_distrib_codename', merge=salt['pillar.get']('postgres:lookup')))) %}
 
 
 #Questions?

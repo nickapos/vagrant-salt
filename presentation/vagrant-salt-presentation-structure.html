@@ -70,6 +70,7 @@ Nick Apostolakis
 <li>chef recipe -&gt; salt state</li>
 <li>chef resource -&gt; salt state module</li>
 <li>chef attributes/databags -&gt; salt pillars</li>
+<li>chef ohai -&gt; salt grains</li>
 <li>chef cookbook -&gt; salt formula</li>
 <li>chef uses ruby DSL -&gt; salt uses YAML and Jinja</li>
 <li>chef can be extended with ruby -&gt; salt can be extended with python</li>
@@ -119,6 +120,91 @@ end</code></pre>
 <li>is unsupported by masterless mode</li>
 <li>setting highstate to true, is the salt way to start converging the minion</li>
 </ul>
+</div>
+<div id="salt-state-files-layout" class="slide section level1">
+<h1>Salt state files layout</h1>
+<ul class="incremental">
+<li>Salt excepts a salt directory and a minion file in that</li>
+<li>It also expects a directory named roots and a file named top.sls in it</li>
+<li>top.sls is the root of all the state files
+<ul class="incremental">
+<li>it defines what kind of environment exists</li>
+<li>which sls files are included in which environment</li>
+<li>the order by which these sls files are goind to be included</li>
+</ul></li>
+<li>in roots directory we can find any number of sls files, or directories of sls files, the usage of which are defined in top.sls</li>
+</ul>
+</div>
+<div id="top.sls-content" class="slide section level1">
+<h1>top.sls content</h1>
+<pre><code>base:
+  &#39;*&#39;:
+    - common-tools
+    - httpd.apache
+    - dovecot.dovecot
+    - bind.bind
+    - db.mysql
+    - db.postgres
+    - supervisord.supervisord</code></pre>
+</div>
+<div id="sls-file-format" class="slide section level1">
+<h1>Sls file format</h1>
+<ul class="incremental">
+<li>Sls files, can include other sls files forming thus a tree. The shape of the tree is fully defined by the developer</li>
+<li>Sls files contain mostly YAML, but can also contain Jinla expressions</li>
+<li>Sls file entries are separated in execution blocks that are consisted of
+<ul class="incremental">
+<li>a unique block id</li>
+<li>a number of salt modules statements</li>
+</ul></li>
+<li>The different execution blocks in an sls file are executed sequentially</li>
+</ul>
+</div>
+<div id="typical-sls-file" class="slide section level1">
+<h1>typical sls file</h1>
+<pre><code>mysql:
+  pkg:
+    - installed
+
+mysql-server:
+  pkg:
+    - installed
+  service:
+    - name: mysqld
+    - running</code></pre>
+</div>
+<div id="sls-example-with-custom-commands-and-file-transfer" class="slide section level1">
+<h1>sls example with custom commands and file transfer</h1>
+<pre><code>supervisor:
+  cmd.run:
+    - cwd: /
+    - user: root
+    - name: pip install supervisor
+    - env:
+      LC_ALL: C.UTF-8
+
+supervisor-init-file:
+  file.managed:
+    - name: /etc/init.d/supervisor
+    - source: salt://supervisord/supervisor
+    - user: root
+    - group: root
+    - mode: 755</code></pre>
+</div>
+<div id="jinja-attribute-file-example" class="slide section level1">
+<h1>jinja attribute file example</h1>
+<pre><code>{% set pg_version = salt[&#39;grains.filter_by&#39;]({
+    &#39;CentOs&#39; : { &#39;id&#39;: &#39;8.4&#39; },
+    &#39;RedHat&#39; : { &#39;id&#39;: &#39;9.1&#39; },
+    &#39;Arch&#39;   : { &#39;id&#39;: &#39;9.1&#39; },
+    &#39;Debian&#39; : { &#39;id&#39;: &#39;9.3&#39; },
+}, merge=salt[&#39;grains.filter_by&#39;]({
+    &#39;14.04&#39;  : { &#39;id&#39;: &#39;9.3&#39; },
+    &#39;14.10&#39;  : { &#39;id&#39;: &#39;9.4&#39; },
+}, grain=&#39;lsb_distrib_release&#39;, merge=salt[&#39;grains.filter_by&#39;]({
+    &#39;jessie&#39; : { &#39;id&#39;: &#39;9.4&#39; },
+    &#39;wheezy&#39; : { &#39;id&#39;: &#39;9.1&#39; },
+}, grain=&#39;lsb_distrib_codename&#39;, merge=salt[&#39;pillar.get&#39;](&#39;postgres:lookup&#39;)))) %}</code></pre>
 </div>
 <div id="questions" class="slide section level1">
 <h1>Questions?</h1>
